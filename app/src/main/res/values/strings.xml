@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">GoMoney Views</string>
+    <string name="hint">123456.000000</string>
+
+    <array name="currency_array">
+        <item>US Dollar ($)</item>
+        <item>Euro (€)</item>
+        <item>Japanese Yan (¥)</item>
+        <item>British Pound (£)</item>
+        <item>Saudi Ryal (﷼)</item>
+        <item>Naira (\u20A6)</item>
+    </array>
+
+    <string name="naira">\u20A6</string>
+</resources>
