@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="currency_symbol" format="string"/>
-    <attr name="show_currency" format="boolean"/>
-    <attr name="show_commas" format="boolean"/>
 
     <declare-styleable name="MoneyEditText">
         <attr name="currency_symbol"/>
-        <attr name="show_currency"/>
-        <attr name="show_commas"/>
     </declare-styleable>
 
     <declare-styleable name="MoneyTextView">
         <attr name="currency_symbol"/>
-        <attr name="show_currency"/>
-        <attr name="show_commas"/>
     </declare-styleable>
-
 </resources>
