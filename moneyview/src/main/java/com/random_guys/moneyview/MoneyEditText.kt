@@ -15,11 +15,13 @@ import java.util.*
  * The EditText widget for support of money requirements like currency, number formatting, comma formatting etc.
  *
  *
- * Add com.gomoney.global.moneyview.MoneyEditText into your XML layouts and you are done!
- * For more information, check http://github.com/wajahatkarim3/EasyMoney-Widgets
+ * Add com.random_guys.moneyview.MoneyEditText into your XML layouts and you are done!
+ * For more information, check https://github.com/random-guys/MoneyView
  *
  * @author Wajahat Karim (http://wajahatkarim.com)
+ * @author Raymond Tukpe
  * @version 1.0.0 01/20/2017
+ * @version 1.1.0 27/07/2019
  */
 class MoneyEditText : AppCompatEditText {
 
@@ -29,8 +31,6 @@ class MoneyEditText : AppCompatEditText {
     }
 
     private var _currencySymbol: String? = null
-    private var _showCurrency: Boolean = false
-    private var _showCommas: Boolean = false
 
     /**
      * Get the value of the text without any commas and currency.
@@ -61,18 +61,6 @@ class MoneyEditText : AppCompatEditText {
     val formattedString: String
         get() = text!!.toString()
 
-    /**
-     * Whether currency is shown in the text or not. (Default is true)
-     *
-     * @return true if the currency is shown otherwise false.
-     */
-    var isShowCurrency: Boolean
-        get() = _showCurrency
-        private set(value) {
-            _showCurrency = value
-            updateValue(text!!.toString())
-        }
-
     constructor(context: Context) : super(context) {
         initView(context, null)
     }
@@ -89,8 +77,6 @@ class MoneyEditText : AppCompatEditText {
     private fun initView(context: Context, attrs: AttributeSet?) {
         // Setting Default Parameters
         _currencySymbol = Currency.getInstance(Locale.getDefault()).symbol
-        _showCurrency = true
-        _showCommas = true
 
         // Check for the attributes
         if (attrs != null) {
@@ -101,9 +87,6 @@ class MoneyEditText : AppCompatEditText {
                 if (currency == null)
                     currency = Currency.getInstance(Locale.getDefault()).symbol
                 setCurrency(currency)
-
-                _showCurrency = attrArray.getBoolean(R.styleable.MoneyEditText_show_currency, true)
-                _showCommas = attrArray.getBoolean(R.styleable.MoneyEditText_show_commas, true)
             } finally {
                 attrArray.recycle()
             }
@@ -215,7 +198,7 @@ class MoneyEditText : AppCompatEditText {
     /**
      * Set the currency symbol for the edit text. (Default is US Dollar $).
      *
-     * @param locale the locale of new symbol. (Defaul is Locale.US)
+     * @param locale the locale of new symbol. (Default is Locale.US)
      */
     fun setCurrency(locale: Locale) {
         setCurrency(Currency.getInstance(locale).symbol)
@@ -224,39 +207,9 @@ class MoneyEditText : AppCompatEditText {
     /**
      * Set the currency symbol for the edit text. (Default is US Dollar $).
      *
-     * @param currency the currency object of new symbol. (Defaul is Locale.US)
+     * @param currency the currency object of new symbol. (Default is Locale.US)
      */
     fun setCurrency(currency: Currency) {
         setCurrency(currency.symbol)
-    }
-
-    /**
-     * Shows the currency in the text. (Default is shown).
-     */
-    fun showCurrencySymbol() {
-        isShowCurrency = true
-    }
-
-    /**
-     * Hides the currency in the text. (Default is shown).
-     */
-    fun hideCurrencySymbol() {
-        isShowCurrency = false
-    }
-
-    /**
-     * Shows the commas in the text. (Default is shown).
-     */
-    fun showCommas() {
-        _showCommas = true
-        updateValue(text!!.toString())
-    }
-
-    /**
-     * Hides the commas in the text. (Default is shown).
-     */
-    fun hideCommas() {
-        _showCommas = false
-        updateValue(text!!.toString())
     }
 }
