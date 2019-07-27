@@ -13,37 +13,59 @@ import java.util.*
  * The TextView widget for support of money requirements like currency, number formatting, comma formatting etc.
  *
  *
- * Add com.gomoney.global.moneyview.MoneyTextView into your XML layouts and you are done!
- * For more information, check http://github.com/wajahatkarim3/EasyMoney-Widgets
+ * Add com.random_guys.moneyview.MoneyTextView into your XML layouts and you are done!
+ * For more information, check https://github.com/random-guys/MoneyView
  *
  * @author Wajahat Karim (http://wajahatkarim.com)
+ * @author Raymond Tukpe
  * @version 1.0.0 01/20/2017
+ * @version 1.1.0 27/07/2019
  */
 class MoneyTextView : AppCompatTextView {
 
     private var _currencySymbol: String? = null
-    private var _showCurrency: Boolean = false
-    private var _showCommas: Boolean = false
+
+    fun setMoneyText(valueStr: String) {
+        val (_text, _spannable) = setValue(valueStr)
+        text = if (_spannable.isEmpty()) _text else _spannable
+    }
 
     /**
      * Get the value of the text without any commas and currency.
-     * For example, if the edit text value is $ 1,34,000.60 then this method will return 134000.60
+     * For example, if the edit text value is $ 1,034,000.60 then this method will return 134000.60
      *
      * @return A string of the raw value in the text field
      */
-    val valueString: String
-        get() {
+    fun valueString(): String {
+        var string = text.toString()
 
-            var string = text.toString()
-
-            if (string.contains(",")) {
-                string = string.replace(",", "")
-            }
-            if (string.contains(" ")) {
-                string = string.substring(string.indexOf(" ") + 1, string.length)
-            }
-            return string
+        if (string.contains(",")) {
+            string = string.replace(",", "")
         }
+        if (string.contains(" ")) {
+            string = string.substring(string.indexOf(" ") + 1, string.length)
+        }
+        return string
+    }
+
+    /**
+     * Get the value of the text without any commas and currency.
+     * For example, if the edit text value is $ 1,034,000.60 then this method will return 134000.60
+     *
+     * @param {@link String} text
+     * @return A string of the raw value in the text field
+     */
+    private fun valueString(text: String): String {
+        var string = text
+
+        if (string.contains(",")) {
+            string = string.replace(",", "")
+        }
+        if (string.contains(" ")) {
+            string = string.substring(string.indexOf(" ") + 1, string.length)
+        }
+        return string
+    }
 
     /**
      * Get the value of the text with formatted commas and currency.
@@ -57,18 +79,6 @@ class MoneyTextView : AppCompatTextView {
             return text.toString()
         }
 
-    /**
-     * Whether currency is shown in the text or not. (Default is true)
-     *
-     * @return true if the currency is shown otherwise false.
-     */
-    var isShowCurrency: Boolean
-        get() = _showCurrency
-        set(value) {
-            _showCurrency = value
-            setValue(text.toString())
-        }
-
     constructor(context: Context) : super(context) {
         initView(context, null)
     }
@@ -80,30 +90,19 @@ class MoneyTextView : AppCompatTextView {
     private fun initView(context: Context, attrs: AttributeSet?) {
         // Setting Default Parameters
         _currencySymbol = Currency.getInstance(Locale.getDefault()).symbol
-        _showCurrency = true
-        _showCommas = true
 
         // Check for the attributes
         if (attrs != null) {
             // Attribute initialization
             val attrArray = context.obtainStyledAttributes(attrs, R.styleable.MoneyTextView, 0, 0)
             try {
-                var currnecy = attrArray.getString(R.styleable.MoneyTextView_currency_symbol)
-                if (currnecy == null)
-                    currnecy = Currency.getInstance(Locale.getDefault()).symbol
-                setCurrency(currnecy)
-
-                _showCurrency = attrArray.getBoolean(R.styleable.MoneyTextView_show_currency, true)
-                _showCommas = attrArray.getBoolean(R.styleable.MoneyTextView_show_commas, true)
+                var currency = attrArray.getString(R.styleable.MoneyTextView_currency_symbol)
+                if (currency == null) currency = Currency.getInstance(Locale.getDefault()).symbol
+                setCurrency(currency)
             } finally {
                 attrArray.recycle()
             }
         }
-    }
-
-    override fun onFinishInflate() {
-        super.onFinishInflate()
-        setValue(text.toString())
     }
 
     private fun getDecoratedStringFromNumber(number: Long): String {
@@ -113,40 +112,38 @@ class MoneyTextView : AppCompatTextView {
         return formatter.format(number)
     }
 
-    private fun setValue(valueStr: String) {
+    private fun setValue(valueStr: String): Pair<String, SpannableString> {
+        var _text = ""
+        var _spannableString = SpannableString("")
         try {
-            val originalString = valueString
+            val originalString = valueString(valueStr)
             val longVal = java.lang.Long.parseLong(originalString)
             val formattedString = getDecoratedStringFromNumber(longVal)
 
             //setting text after format to EditText
-            text = formattedString
-
-        } catch (nfe: NumberFormatException) {
+            _text = formattedString
+        } catch (nfe: Throwable) {
             nfe.printStackTrace()
-            text = valueStr
 
-            val valStr = valueString
-
-            if (valStr == "") {
-                val `val`: Long = 0
-                text = getDecoratedStringFromNumber(`val`)
+            if (valueStr == "") {
+                _text = getDecoratedStringFromNumber(0L)
             } else {
                 // Some decimal number
-                if (valStr.contains(".")) {
-                    if (valStr.indexOf(".") == valStr.length - 1) {
+                if (valueStr.contains(".")) {
+                    if (valueStr.indexOf(".") == valueStr.length - 1) {
                         // decimal has been currently put
                         val front = getDecoratedStringFromNumber(
                             java.lang.Long.parseLong(
-                                valStr.substring(
+                                valueString(valueStr).substring(
                                     0,
-                                    valStr.length - 1
+                                    valueString(valueStr).length - 1
                                 )
                             )
                         )
-                        text = "$front."
+                        _text = "$front."
                     } else {
-                        val nums = valueString.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        val nums =
+                            valueString(valueStr).split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                         val front = getDecoratedStringFromNumber(java.lang.Long.parseLong(nums[0]))
                         val finalText = front + "." + nums[1]
                         val spannableString = SpannableString(finalText)
@@ -156,12 +153,12 @@ class MoneyTextView : AppCompatTextView {
                             finalText.length,
                             Spannable.SPAN_PRIORITY
                         )
-                        text = spannableString
+                        _spannableString = spannableString
                     }
                 }
             }
         }
-
+        return Pair(_text, _spannableString)
     }
 
     /**
@@ -171,13 +168,12 @@ class MoneyTextView : AppCompatTextView {
      */
     fun setCurrency(newSymbol: String?) {
         _currencySymbol = newSymbol
-        setValue(text.toString())
     }
 
     /**
      * Set the currency symbol for the edit text. (Default is US Dollar $).
      *
-     * @param locale the locale of new symbol. (Defaul is Locale.US)
+     * @param locale the locale of new symbol. (Default is Locale.US)
      */
     fun setCurrency(locale: Locale) {
         setCurrency(Currency.getInstance(locale).symbol)
@@ -186,39 +182,9 @@ class MoneyTextView : AppCompatTextView {
     /**
      * Set the currency symbol for the edit text. (Default is US Dollar $).
      *
-     * @param currency the currency object of new symbol. (Defaul is Locale.US)
+     * @param currency the currency object of new symbol. (Default is Locale.US)
      */
     fun setCurrency(currency: Currency) {
         setCurrency(currency.symbol)
-    }
-
-    /**
-     * Shows the currency in the text. (Default is shown).
-     */
-    fun showCurrencySymbol() {
-        isShowCurrency = true
-    }
-
-    /**
-     * Hides the currency in the text. (Default is shown).
-     */
-    fun hideCurrencySymbol() {
-        isShowCurrency = false
-    }
-
-    /**
-     * Shows the commas in the text. (Default is shown).
-     */
-    fun showCommas() {
-        _showCommas = true
-        setValue(text.toString())
-    }
-
-    /**
-     * Hides the commas in the text. (Default is shown).
-     */
-    fun hideCommas() {
-        _showCommas = false
-        setValue(text.toString())
     }
 }
