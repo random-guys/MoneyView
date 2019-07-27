@@ -1,4 +1,4 @@
-package com.gomoney.gomoneyviews
+package com.random_guys.gomoneyviews
 
 import android.os.Bundle
 import android.util.Log
@@ -7,8 +7,8 @@ import android.widget.AdapterView
 import android.widget.CheckBox
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import com.gomoney.global.moneyview.MoneyEditText
-import com.gomoney.global.moneyview.MoneyTextView
+import com.random_guys.moneyview.MoneyEditText
+import com.random_guys.moneyview.MoneyTextView
 
 class MainActivity : AppCompatActivity() {
 
