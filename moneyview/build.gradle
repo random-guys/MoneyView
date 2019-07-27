@@ -49,7 +49,7 @@ publish {
     userOrg = 'random-guys'
     groupId = 'com.random-guys'
     artifactId = 'moneyview'
-    publishVersion = '1.0.0'
+    publishVersion = '1.1.0'
     desc = 'GoMoney EditText and TextView for formatting monetary values'
     bintrayUser = BINTRAY_USER
     bintrayKey = BINTRAY_API_KEY
