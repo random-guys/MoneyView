@@ -1,4 +1,4 @@
-package com.gomoney.global.moneyview
+package com.random_guys.moneyview
 
 import android.content.Context
 import android.text.Spannable

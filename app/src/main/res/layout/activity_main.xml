@@ -11,9 +11,9 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:orientation="vertical"
-        tools:context="com.gomoney.gomoneyviews.MainActivity">
+        tools:context="com.random_guys.gomoneyviews.MainActivity">
 
-    <com.gomoney.global.moneyview.MoneyEditText
+    <com.random_guys.moneyview.MoneyEditText
             android:id="@+id/moneyEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             app:show_currency="true"
             app:show_commas="true"/>
 
-    <com.gomoney.global.moneyview.MoneyTextView
+    <com.random_guys.moneyview.MoneyTextView
             android:id="@+id/moneyTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

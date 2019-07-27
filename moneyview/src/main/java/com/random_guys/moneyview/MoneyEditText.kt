@@ -1,4 +1,4 @@
-package com.gomoney.global.moneyview
+package com.random_guys.moneyview
 
 import android.content.Context
 import android.text.Editable
@@ -7,7 +7,6 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.RelativeSizeSpan
 import android.util.AttributeSet
-import android.util.Log
 import androidx.appcompat.widget.AppCompatEditText
 import java.text.DecimalFormat
 import java.util.*
