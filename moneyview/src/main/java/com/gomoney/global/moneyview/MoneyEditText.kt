@@ -165,7 +165,7 @@ class MoneyEditText : AppCompatEditText {
                                     nums[0] = nums[0].plus(nums[1][0])
                                     nums[1] = nums[1].substring(1)
                                 }
-                                Log.d(TAG, nums[0] + nums[1])
+
                                 val front = getDecoratedStringFromNumber(java.lang.Long.parseLong(nums[0]))
                                 val finalText = front + "." + nums[1]
                                 val spannableString = SpannableString(finalText)
@@ -198,23 +198,9 @@ class MoneyEditText : AppCompatEditText {
 
     private fun getDecoratedStringFromNumber(number: Long): String {
         val numberPattern = "#,###,###,###"
-        var decoStr = ""
-
         val formatter = DecimalFormat.getInstance(Locale.getDefault()) as DecimalFormat
-        if (_showCommas && !_showCurrency)
-            formatter.applyPattern(numberPattern)
-        else if (_showCommas && _showCurrency)
-            formatter.applyPattern("$_currencySymbol $numberPattern")
-        else if (!_showCommas && _showCurrency)
-            formatter.applyPattern(_currencySymbol!! + " ")
-        else if (!_showCommas && !_showCurrency) {
-            decoStr = number.toString() + ""
-            return decoStr
-        }
-
-        decoStr = formatter.format(number)
-
-        return decoStr
+        formatter.applyPattern("$_currencySymbol $numberPattern")
+        return formatter.format(number)
     }
 
     /**

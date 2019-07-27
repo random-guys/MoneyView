@@ -1,6 +1,9 @@
 package com.gomoney.global.moneyview
 
 import android.content.Context
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import java.text.DecimalFormat
@@ -105,23 +108,9 @@ class MoneyTextView : AppCompatTextView {
 
     private fun getDecoratedStringFromNumber(number: Long): String {
         val numberPattern = "#,###,###,###"
-        var decoStr = ""
-
         val formatter = DecimalFormat.getInstance(Locale.getDefault()) as DecimalFormat
-        if (_showCommas && !_showCurrency)
-            formatter.applyPattern(numberPattern)
-        else if (_showCommas && _showCurrency)
-            formatter.applyPattern("$_currencySymbol $numberPattern")
-        else if (!_showCommas && _showCurrency)
-            formatter.applyPattern(_currencySymbol!! + " ")
-        else if (!_showCommas && !_showCurrency) {
-            decoStr = number.toString() + ""
-            return decoStr
-        }
-
-        decoStr = formatter.format(number)
-
-        return decoStr
+        formatter.applyPattern("$_currencySymbol $numberPattern")
+        return formatter.format(number)
     }
 
     private fun setValue(valueStr: String) {
@@ -159,7 +148,15 @@ class MoneyTextView : AppCompatTextView {
                     } else {
                         val nums = valueString.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                         val front = getDecoratedStringFromNumber(java.lang.Long.parseLong(nums[0]))
-                        text = front + "." + nums[1]
+                        val finalText = front + "." + nums[1]
+                        val spannableString = SpannableString(finalText)
+                        spannableString.setSpan(
+                            RelativeSizeSpan(0.7f),
+                            front.length,
+                            finalText.length,
+                            Spannable.SPAN_PRIORITY
+                        )
+                        text = spannableString
                     }
                 }
             }

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GoMoney Views</string>
-    <string name="hint">123456.000000</string>
+    <string name="hint">123456.00</string>
 
     <array name="currency_array">
         <item>US Dollar ($)</item>
