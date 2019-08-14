@@ -112,18 +112,18 @@ class MoneyEditText : AppCompatEditText {
                     val formattedString = getDecoratedStringFromNumber(longVal)
 
                     //setting text after format to EditText
-                    setText(formattedString)
+                    updateValue(formattedString)
                     setSelection(text!!.length)
 
                 } catch (nfe: NumberFormatException) {
                     nfe.printStackTrace()
-                    setText(backupString)
+                    updateValue(backupString)
 
                     val valStr = valueString
 
                     if (valStr == "") {
                         val valueNumber: Long = 0
-                        setText(getDecoratedStringFromNumber(valueNumber))
+                        updateValue(getDecoratedStringFromNumber(valueNumber))
                     } else {
                         // Some decimal number
                         if (valStr.contains(".")) {
@@ -137,7 +137,7 @@ class MoneyEditText : AppCompatEditText {
                                         )
                                     )
                                 )
-                                setText("$front.")
+                                updateValue("$front.")
                             } else {
                                 val nums: Array<String> =
                                     valueString.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -151,12 +151,21 @@ class MoneyEditText : AppCompatEditText {
                                 val front = getDecoratedStringFromNumber(java.lang.Long.parseLong(nums[0]))
                                 val finalText = front + "." + nums[1]
                                 val spannableString = SpannableString(finalText)
+
+                                spannableString.setSpan(
+                                    RelativeSizeSpan(0.7f),
+                                    0,
+                                    1,
+                                    Spannable.SPAN_PRIORITY
+                                )
+
                                 spannableString.setSpan(
                                     RelativeSizeSpan(0.7f),
                                     front.length,
                                     finalText.length,
                                     Spannable.SPAN_PRIORITY
                                 )
+
                                 setText(spannableString)
                             }
                         }
@@ -175,13 +184,22 @@ class MoneyEditText : AppCompatEditText {
     }
 
     private fun updateValue(text: String) {
-        setText(text)
+        val spannableString = SpannableString(text)
+
+        spannableString.setSpan(
+            RelativeSizeSpan(0.7f),
+            0,
+            1,
+            Spannable.SPAN_PRIORITY
+        )
+
+        setText(spannableString)
     }
 
     private fun getDecoratedStringFromNumber(number: Long): String {
         val numberPattern = "#,###,###,###"
         val formatter = DecimalFormat.getInstance(Locale.getDefault()) as DecimalFormat
-        formatter.applyPattern("$_currencySymbol $numberPattern")
+        formatter.applyPattern("$_currencySymbol$numberPattern")
         return formatter.format(number)
     }
 
@@ -192,7 +210,7 @@ class MoneyEditText : AppCompatEditText {
      */
     fun setCurrency(newSymbol: String?) {
         _currencySymbol = newSymbol
-        updateValue(text!!.toString())
+        updateValue(text?.toString()!!)
     }
 
     /**

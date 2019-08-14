@@ -108,25 +108,25 @@ class MoneyTextView : AppCompatTextView {
     private fun getDecoratedStringFromNumber(number: Long): String {
         val numberPattern = "#,###,###,###"
         val formatter = DecimalFormat.getInstance(Locale.getDefault()) as DecimalFormat
-        formatter.applyPattern("$_currencySymbol $numberPattern")
+        formatter.applyPattern("$_currencySymbol$numberPattern")
         return formatter.format(number)
     }
 
     private fun setValue(valueStr: String): Pair<String, SpannableString> {
-        var _text = ""
-        var _spannableString = SpannableString("")
+        var tempText = ""
+        var tempSpannableString = SpannableString("")
         try {
             val originalString = valueString(valueStr)
             val longVal = java.lang.Long.parseLong(originalString)
             val formattedString = getDecoratedStringFromNumber(longVal)
 
             //setting text after format to EditText
-            _text = formattedString
+            tempText = formattedString
         } catch (nfe: Throwable) {
             nfe.printStackTrace()
 
             if (valueStr == "") {
-                _text = getDecoratedStringFromNumber(0L)
+                tempText = getDecoratedStringFromNumber(0L)
             } else {
                 // Some decimal number
                 if (valueStr.contains(".")) {
@@ -140,25 +140,33 @@ class MoneyTextView : AppCompatTextView {
                                 )
                             )
                         )
-                        _text = "$front."
+                        tempText = "$front."
                     } else {
                         val nums =
                             valueString(valueStr).split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                         val front = getDecoratedStringFromNumber(java.lang.Long.parseLong(nums[0]))
                         val finalText = front + "." + nums[1]
                         val spannableString = SpannableString(finalText)
+
+                        spannableString.setSpan(
+                            RelativeSizeSpan(0.7f),
+                            0,
+                            1,
+                            Spannable.SPAN_PRIORITY
+                        )
+
                         spannableString.setSpan(
                             RelativeSizeSpan(0.7f),
                             front.length,
                             finalText.length,
                             Spannable.SPAN_PRIORITY
                         )
-                        _spannableString = spannableString
+                        tempSpannableString = spannableString
                     }
                 }
             }
         }
-        return Pair(_text, _spannableString)
+        return Pair(tempText, tempSpannableString)
     }
 
     /**
