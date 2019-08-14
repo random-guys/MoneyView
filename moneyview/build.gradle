@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'kotlin-android'
@@ -7,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.1"
 
     defaultConfig {
         minSdkVersion 19
@@ -32,26 +31,4 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-Properties properties = new Properties()
-if (project.rootProject.file('local.properties').canRead()) {
-    properties.load(new FileInputStream(project.rootProject.file('local.properties')))
-} else {
-    throw new GradleException("Could not read version.properties!")
-}
-
-def BINTRAY_USER = properties.getProperty("bintray.user", "")
-
-def BINTRAY_API_KEY = properties.getProperty("bintray.apikey", "")
-
-publish {
-    repoName = 'MoneyView'
-    dryRun = false
-    userOrg = 'random-guys'
-    groupId = 'com.random-guys'
-    artifactId = 'moneyview'
-    publishVersion = '1.1.0'
-    desc = 'GoMoney EditText and TextView for formatting monetary values'
-    bintrayUser = BINTRAY_USER
-    bintrayKey = BINTRAY_API_KEY
-    repository = 'https://github.com/random-guys/MoneyView'
-}
+apply from: 'publish.gradle'
