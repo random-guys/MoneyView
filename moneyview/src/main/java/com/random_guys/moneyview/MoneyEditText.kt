@@ -40,8 +40,7 @@ class MoneyEditText : AppCompatEditText {
      */
     val valueString: String
         get() {
-
-            var string = text!!.toString()
+            var string = text?.toString()!!
 
             if (string.contains(",")) {
                 string = string.replace(",", "")
@@ -49,7 +48,7 @@ class MoneyEditText : AppCompatEditText {
             if (string.contains(" ")) {
                 string = string.substring(string.indexOf(" ") + 1, string.length)
             }
-            return string
+            return string.replace(_currencySymbol!!, "")
         }
 
     /**
@@ -140,7 +139,7 @@ class MoneyEditText : AppCompatEditText {
                                 updateValue("$front.")
                             } else {
                                 val nums: Array<String> =
-                                    valueString.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                                    valStr.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                                 // the decimal part of the string can only have two digits
                                 // move the extra string to the whole number part
                                 if (nums[1].length > 2) {
