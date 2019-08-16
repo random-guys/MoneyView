@@ -45,7 +45,7 @@ class MoneyTextView : AppCompatTextView {
         if (string.contains(" ")) {
             string = string.substring(string.indexOf(" ") + 1, string.length)
         }
-        return string
+        return string.replace(_currencySymbol!!, "")
     }
 
     /**
@@ -64,7 +64,7 @@ class MoneyTextView : AppCompatTextView {
         if (string.contains(" ")) {
             string = string.substring(string.indexOf(" ") + 1, string.length)
         }
-        return string
+        return string.replace(_currencySymbol!!, "")
     }
 
     /**

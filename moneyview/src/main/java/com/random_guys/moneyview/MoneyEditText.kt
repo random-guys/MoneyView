@@ -183,8 +183,9 @@ class MoneyEditText : AppCompatEditText {
     }
 
     private fun updateValue(text: String) {
-        val spannableString = SpannableString(text)
+        if (text.isEmpty()) return
 
+        val spannableString = SpannableString(text)
         spannableString.setSpan(
             RelativeSizeSpan(0.7f),
             0,

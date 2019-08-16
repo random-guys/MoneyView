@@ -16,9 +16,9 @@
             android:id="@+id/moneyEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/hint"
-            android:background="@null"
+            android:background="@color/colorPrimary"
             android:padding="16dp"
+            android:textColor="@color/colorAccent"
             android:inputType="numberDecimal"
             app:currency_symbol="@string/naira"/>
 
