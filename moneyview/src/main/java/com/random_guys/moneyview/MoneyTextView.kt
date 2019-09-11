@@ -123,8 +123,6 @@ class MoneyTextView : AppCompatTextView {
             //setting text after format to EditText
             tempText = formattedString
         } catch (nfe: Throwable) {
-            nfe.printStackTrace()
-
             if (valueStr == "") {
                 tempText = getDecoratedStringFromNumber(0L)
             } else {
@@ -143,7 +141,8 @@ class MoneyTextView : AppCompatTextView {
                         tempText = "$front."
                     } else {
                         val nums =
-                            valueString(valueStr).split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                            valueString(valueStr).split("\\.".toRegex())
+                                .dropLastWhile { it.isEmpty() }.toTypedArray()
                         val front = getDecoratedStringFromNumber(java.lang.Long.parseLong(nums[0]))
                         val finalText = front + "." + nums[1]
                         val spannableString = SpannableString(finalText)

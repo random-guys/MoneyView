@@ -115,7 +115,6 @@ class MoneyEditText : AppCompatEditText {
                     setSelection(text!!.length)
 
                 } catch (nfe: NumberFormatException) {
-                    nfe.printStackTrace()
                     updateValue(backupString)
 
                     val valStr = valueString
